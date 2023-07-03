@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const chatRoutes = require("./openAI/chat");
 const textRoutes = require("./openAI/text");
+const imgRoutes = require("./openAI/image");
 const { load: loadRandomContents } = require("./utils/randomContents");
 
 const start = async () => {
@@ -13,6 +14,7 @@ const start = async () => {
   app.use(express.json());
   app.use(chatRoutes);
   app.use(textRoutes);
+  app.use(imgRoutes);
 
   app.get("/", (req, res) => {
     res.send("Hello World! This is MockAI");
