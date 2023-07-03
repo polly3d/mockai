@@ -4,22 +4,27 @@ const { tokenize } = require("../utils/tokenize");
 
 const router = express.Router();
 
-router.post("/v1/chat/completions", (req, res) => {
+router.post("/v1/completions", (req, res) => {
   const defaultMockType = process.env.MOCK_TYPE || "random";
   const {
-    messages,
+    model,
+    prompt,
     stream,
     mockType = defaultMockType,
     mockFixedContents,
-    model,
   } = req.body;
   const randomResponses = getRandomContents();
 
   // Check if 'messages' is provided and is an array
-  if (!messages || !Array.isArray(messages)) {
+  if (!prompt) {
     return res
       .status(400)
-      .json({ error: 'Missing or invalid "messages" in request body' });
+      .json({ error: 'Missing or invalid "prompt" in request body' });
+  }
+  if (!model) {
+    return res
+      .status(400)
+      .json({ error: 'Missing or invalid "model" in request body' });
   }
 
   // Check if 'stream' is a boolean
@@ -51,17 +56,15 @@ router.post("/v1/chat/completions", (req, res) => {
     res.setHeader("Connection", "keep-alive");
 
     const data = {
-      id: "chatcmpl-7UR4UcvmeD79Xva3UxkKkL2es6b5W",
+      id: "cmpl-7UR4UcvmeD79Xva3UxkKkL2es6b5W",
       object: "chat.completion.chunk",
       created: Date.now(),
       model: model,
       choices: [
         {
           index: 0,
-          delta: {
-            role: "assistant",
-            content: "",
-          },
+          text: "",
+          logprobs: null,
           finish_reason: null,
         },
       ],
@@ -72,7 +75,7 @@ router.post("/v1/chat/completions", (req, res) => {
     let tokens = tokenize(content); // Tokenize the content
     let intervalId = setInterval(() => {
       if (chunkIndex < tokens.length) {
-        data.choices[0].delta.content = tokens[chunkIndex];
+        data.choices[0].text = tokens[chunkIndex];
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         chunkIndex++;
       } else {
@@ -92,17 +95,15 @@ router.post("/v1/chat/completions", (req, res) => {
 
     for (let i = 0; i < n; i++) {
       choices.push({
-        message: {
-          role: "assistant",
-          content: content,
-        },
+        text: content,
         finish_reason: "stop",
+        logprobs: null,
         index: i,
       });
     }
 
     const response = {
-      id: "chatcmpl-2nYZXNHxx1PeK1u8xXcE1Fqr1U6Ve",
+      id: "cmpl-2nYZXNHxx1PeK1u8xXcE1Fqr1U6Ve",
       object: "chat.completion",
       created: Math.floor(Date.now() / 1000),
       model: model,
