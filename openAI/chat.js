@@ -1,5 +1,6 @@
 const express = require("express");
 const { getRandomContents } = require("../utils/randomContents");
+const { tokenize } = require("../utils/tokenize");
 
 const router = express.Router();
 
@@ -68,9 +69,11 @@ router.post("/v1/chat/completions", (req, res) => {
 
     const intervalTime = 100;
     let chunkIndex = 0;
+    let tokens = tokenize(content); // Tokenize the content
+    console.log(tokens);
     let intervalId = setInterval(() => {
-      if (chunkIndex < content.length) {
-        data.choices[0].delta.content = content[chunkIndex];
+      if (chunkIndex < tokens.length) {
+        data.choices[0].delta.content = tokens[chunkIndex];
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         chunkIndex++;
       } else {
