@@ -1,0 +1,22 @@
+Hi there! How can I assist you today? 😊
+This is a break line text.
+@@@@
+Here are a few suggestions based on what you've typed so far:
+
+```js
+const suggestions = [
+  "How to book a flight",
+  "What are the best hotels in New York",
+  "Things to do in Tokyo"
+];
+```
+
+Thank you for your message. Our team will get back to you as soon as possible. 🙏
+@@@@
+Here's some Python code:
+This is a break line text.
+
+```py
+def greet(name):
+  print('Hello, ' + name + '!')
+```

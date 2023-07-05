@@ -8,6 +8,7 @@ const load = () => {
   return new Promise((resolve, reject) => {
     const rootDir = path.resolve(__dirname, "../");
     const filePath = process.env.MOCK_FILE_PATH || "";
+    const seperator = process.env.MOCK_FILE_SEPERATER || "\n";
 
     if (filePath === "") {
       randomResponses = [
@@ -24,11 +25,20 @@ const load = () => {
         crlfDelay: Infinity,
       });
 
+      let currentLine = "";
       rl.on("line", (line) => {
-        randomResponses.push(line);
+        if (line.trim() === seperator) {
+          randomResponses.push(currentLine);
+          currentLine = "";
+        } else {
+          currentLine += line + "\n\n";
+        }
       });
 
       rl.on("close", () => {
+        if (currentLine !== "") {
+          randomResponses.push(currentLine);
+        }
         resolve();
       });
 
