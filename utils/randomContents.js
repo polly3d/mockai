@@ -8,7 +8,7 @@ const load = () => {
   return new Promise((resolve, reject) => {
     const rootDir = path.resolve(__dirname, "../");
     const filePath = process.env.MOCK_FILE_PATH || "";
-    const seperator = process.env.MOCK_FILE_SEPERATER || "\n";
+    const separator = process.env.MOCK_FILE_SEPARATOR || "\n";
 
     if (filePath === "") {
       randomResponses = [
@@ -27,7 +27,7 @@ const load = () => {
 
       let currentLine = "";
       rl.on("line", (line) => {
-        if (line.trim() === seperator) {
+        if (line.trim() === separator) {
           randomResponses.push(currentLine);
           currentLine = "";
         } else {
