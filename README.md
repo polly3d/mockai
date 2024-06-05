@@ -4,7 +4,7 @@ MockAI is a mock server for OpenAI's API. It allows you to simulate API response
 
 ## Features
 
-- Supports the following endpoint.
+- Supports the following endpoints:
 
   - `/v1/completions`
   - `/v1/chat/completions`
