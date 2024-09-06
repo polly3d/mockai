@@ -46,6 +46,9 @@ npm start
 - **MOCK_FILE_PATH**: The path to the text file of random responses.
 - **MOCK_FILE_SEPERATER**: Random contents seperater. As there may be instances of line breaks or code outputs, it is not advisable to separate with line breaks.
 
+## Custom Header
+- `x-set-response-delay-ms` header can be sent from the client to delay the response by that time.
+
 ## Contributing
 
 Contributions are welcome! Please submit a pull request or create an issue to get started.
