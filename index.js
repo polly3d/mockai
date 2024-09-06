@@ -7,6 +7,8 @@ const textRoutes = require("./openAI/text");
 const imgRoutes = require("./openAI/image");
 const embeddingRoutes = require("./openAI/embeddings");
 const { load: loadRandomContents } = require("./utils/randomContents");
+const delay = require("./utils/delay")
+
 
 const start = async () => {
   await loadRandomContents();
@@ -18,7 +20,12 @@ const start = async () => {
   app.use(imgRoutes);
   app.use(embeddingRoutes);
 
-  app.get("/", (req, res) => {
+  app.get("/", async (req, res) => {
+    const delayHeader = req.headers["x-set-response-delay-ms"]
+
+  let delayTime = parseInt(delayHeader) || 0
+
+  await delay(delayTime)
     res.send("Hello World! This is MockAI");
   });
 
