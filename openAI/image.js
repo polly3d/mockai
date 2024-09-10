@@ -1,8 +1,14 @@
 const express = require("express");
+const delay = require("../utils/delay")
 
 const router = express.Router();
 
-router.post("/v1/images/generations", (req, res) => {
+router.post("/v1/images/generations", async (req, res) => {
+  const delayHeader = req.headers["x-set-response-delay-ms"]
+
+  let delayTime = parseInt(delayHeader) || 0
+
+  await delay(delayTime)
   const { prompt, n } = req.body;
 
   // Check if 'prompt' is provided and is an array

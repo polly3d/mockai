@@ -1,10 +1,17 @@
 const express = require("express");
 const { getRandomContents } = require("../utils/randomContents");
 const { tokenize } = require("../utils/tokenize");
+const delay = require("../utils/delay")
+
 
 const router = express.Router();
 
-router.post("/v1/completions", (req, res) => {
+router.post("/v1/completions", async (req, res) => {
+  const delayHeader = req.headers["x-set-response-delay-ms"]
+
+  let delayTime = parseInt(delayHeader) || 0
+
+  await delay(delayTime)
   const defaultMockType = process.env.MOCK_TYPE || "random";
   const {
     model,
