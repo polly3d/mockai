@@ -4,7 +4,7 @@ MockAI is a mock server for OpenAI's API. It allows you to simulate API response
 
 ## Features
 
-- Supports the following endpoint.
+- Supports the following endpoints:
 
   - `/v1/completions`
   - `/v1/chat/completions`
@@ -30,7 +30,7 @@ Open .env file and set your environment.
 SERVER_PORT=5002
 MOCK_TYPE=random
 MOCK_FILE_PATH=data/contents.txt
-MOCK_FILE_SEPERATER="@@@@"
+MOCK_FILE_SEPARATOR="@@@@"
 ```
 
 3. Start server:
@@ -44,7 +44,7 @@ npm start
 - **SERVER_PORT**: The port the server listens on.
 - **DEFAULT_MOCK_TYPE**: The default type of mock response.
 - **MOCK_FILE_PATH**: The path to the text file of random responses.
-- **MOCK_FILE_SEPERATER**: Random contents seperater. As there may be instances of line breaks or code outputs, it is not advisable to separate with line breaks.
+- **MOCK_FILE_SEPARATOR**: Random contents separator. As there may be instances of line breaks or code outputs, it is not advisable to separate with line breaks.
 
 ## Contributing
 
