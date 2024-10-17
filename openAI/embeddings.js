@@ -26,11 +26,19 @@ router.post("/v1/embeddings", (req, res) => {
     const response = {
         object: "list",
         data: [
-            {
-                object: "embedding",
-                index: 0,
-                embedding: embeddingArray
-            }
+            ...(Array.isArray(input)
+                ? input.map((_, i) => ({
+                    object: "embedding",
+                    index: i,
+                    embedding: embeddingArray,
+                  }))
+                : [
+                    {
+                      object: "embedding",
+                      index: 0,
+                      embedding: embeddingArray,
+                    },
+                  ]),
         ],
         model: model,
         usage: {
