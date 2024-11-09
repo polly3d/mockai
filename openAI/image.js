@@ -1,9 +1,11 @@
 const express = require("express");
 const delay = require("../utils/delay")
+const { requestCounter, requestLatency, payloadSize } = require("../utils/metrics")
 
 const router = express.Router();
 
 router.post("/v1/images/generations", async (req, res) => {
+  then = Date.now();
   const delayHeader = req.headers["x-set-response-delay-ms"]
 
   let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
@@ -13,6 +15,9 @@ router.post("/v1/images/generations", async (req, res) => {
 
   // Check if 'prompt' is provided and is an array
   if (!prompt) {
+    requestCounter.inc({ method: "POST", path: "/v1/images/generations", status: 400 });
+    requestLatency.observe({ method: "POST", path: "/v1/images/generations", status: 400 }, (Date.now() - then));
+    payloadSize.observe({ method: "POST", path: "/v1/images/generations", status: 400 }, req.socket.bytesRead);
     return res
       .status(400)
       .json({ error: 'Missing or invalid "prompt" in request body' });
@@ -36,6 +41,9 @@ router.post("/v1/images/generations", async (req, res) => {
     data: imgs,
   };
 
+  requestCounter.inc({ method: "POST", path: "/v1/images/generations", status: 200 });
+  requestLatency.observe({ method: "POST", path: "/v1/images/generations", status: 200 }, (Date.now() - then));
+  payloadSize.observe({ method: "POST", path: "/v1/images/generations", status: 200 }, req.socket.bytesRead);
   res.json(response);
 });
 

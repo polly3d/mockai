@@ -2,11 +2,13 @@ const express = require("express");
 const { getRandomContents } = require("../utils/randomContents");
 const { tokenize } = require("../utils/tokenize");
 const delay = require("../utils/delay")
+const { requestCounter, requestLatency, payloadSize } = require("../utils/metrics")
 
 
 const router = express.Router();
 
 router.post("/v1/completions", async (req, res) => {
+  then = Date.now();
   const delayHeader = req.headers["x-set-response-delay-ms"]
 
   let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
@@ -24,11 +26,17 @@ router.post("/v1/completions", async (req, res) => {
 
   // Check if 'messages' is provided and is an array
   if (!prompt) {
+    requestCounter.inc({ method: "POST", path: "/v1/completions", status: 400 });
+    requestLatency.observe({ method: "POST", path: "/v1/completions", status: 400 }, (Date.now() - then));
+    payloadSize.observe({ method: "POST", path: "/v1/completions", status: 400 }, req.socket.bytesRead);
     return res
       .status(400)
       .json({ error: 'Missing or invalid "prompt" in request body' });
   }
   if (!model) {
+    requestCounter.inc({ method: "POST", path: "/v1/completions", status: 400 });
+    requestLatency.observe({ method: "POST", path: "/v1/completions", status: 400 }, (Date.now() - then));
+    payloadSize.observe({ method: "POST", path: "/v1/completions", status: 400 }, req.socket.bytesRead);
     return res
       .status(400)
       .json({ error: 'Missing or invalid "model" in request body' });
@@ -36,6 +44,9 @@ router.post("/v1/completions", async (req, res) => {
 
   // Check if 'stream' is a boolean
   if (stream !== undefined && typeof stream !== "boolean") {
+    requestCounter.inc({ method: "POST", path: "/v1/completions", status: 400 });
+    requestLatency.observe({ method: "POST", path: "/v1/completions", status: 400 }, (Date.now() - then));
+    payloadSize.observe({ method: "POST", path: "/v1/completions", status: 400 }, req.socket.bytesRead);
     return res.status(400).json({ error: 'Invalid "stream" in request body' });
   }
 
@@ -93,6 +104,9 @@ router.post("/v1/completions", async (req, res) => {
         };
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         res.write(`data: [DONE]\n\n`);
+        requestCounter.inc({ method: "POST", path: "/v1/completions", status: 200 });
+        requestLatency.observe({ method: "POST", path: "/v1/completions", status: 200 }, (Date.now() - then));
+        payloadSize.observe({ method: "POST", path: "/v1/completions", status: 200 }, req.socket.bytesRead);
         res.end();
       }
     }, intervalTime);
@@ -122,6 +136,9 @@ router.post("/v1/completions", async (req, res) => {
       choices: choices,
     };
     // Send the response
+    requestCounter.inc({ method: "POST", path: "/v1/completions", status: 200 });
+    requestLatency.observe({ method: "POST", path: "/v1/completions", status: 200 }, (Date.now() - then));
+    payloadSize.observe({ method: "POST", path: "/v1/completions", status: 200 }, req.socket.bytesRead);
     res.json(response);
   }
 });
