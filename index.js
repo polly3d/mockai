@@ -14,7 +14,8 @@ const start = async () => {
   await loadRandomContents();
 
   const port = process.env.SERVER_PORT || 5001;
-  app.use(express.json());
+  const req_limit = process.env.REQUEST_SIZE_LIMIT || "10kb";
+  app.use(express.json({"limit": req_limit}));
   app.use(chatRoutes);
   app.use(textRoutes);
   app.use(imgRoutes);
