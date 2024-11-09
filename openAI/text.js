@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/v1/completions", async (req, res) => {
   const delayHeader = req.headers["x-set-response-delay-ms"]
 
-  let delayTime = parseInt(delayHeader) || 0
+  let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
 
   await delay(delayTime)
   const defaultMockType = process.env.MOCK_TYPE || "random";

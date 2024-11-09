@@ -23,7 +23,7 @@ const start = async () => {
   app.get("/", async (req, res) => {
     const delayHeader = req.headers["x-set-response-delay-ms"]
 
-  let delayTime = parseInt(delayHeader) || 0
+  let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
 
   await delay(delayTime)
     res.send("Hello World! This is MockAI");

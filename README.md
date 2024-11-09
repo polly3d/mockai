@@ -45,9 +45,9 @@ npm start
 - **DEFAULT_MOCK_TYPE**: The default type of mock response.
 - **MOCK_FILE_PATH**: The path to the text file of random responses.
 - **MOCK_FILE_SEPARATOR**: Random contents separator. As there may be instances of line breaks or code outputs, it is not advisable to separate with line breaks.
-
+- **RESPONSE_DELAY_MS**: Delays Response by time in milliseconds
 ## Custom Header
-- `x-set-response-delay-ms` header can be sent from the client to delay the response by that time.
+- `x-set-response-delay-ms` header can be sent from the client to delay the response by that time (Takes precedence over the enviornment variable RESPONSE_DELAY_MS).
 
 ## Contributing
 

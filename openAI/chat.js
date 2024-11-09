@@ -8,7 +8,8 @@ const router = express.Router();
 router.post("/v1/chat/completions", async (req, res) => {
   const delayHeader = req.headers["x-set-response-delay-ms"]
 
-  let delayTime = parseInt(delayHeader) || 0
+  // delay is header is present. Else fallback to environment Variable
+  let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
 
   await delay(delayTime)
   const defaultMockType = process.env.MOCK_TYPE || "random";
