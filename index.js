@@ -1,7 +1,10 @@
 require("dotenv").config();
 
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
+const requestId = require("./utils/requestId");
 const chatRoutes = require("./openAI/chat");
 const textRoutes = require("./openAI/text");
 const imgRoutes = require("./openAI/image");
@@ -17,6 +20,27 @@ const start = async () => {
   const port = process.env.SERVER_PORT || 5001;
   const req_limit = process.env.REQUEST_SIZE_LIMIT || "10kb";
   app.use(express.json({"limit": req_limit}));
+  
+  // Request Logger Configuration
+  app.use(requestId);
+  morgan.token('id', function getId(req) {
+      return req.id
+  });
+  loggerFormat = ':id [:date[web]]" :method :url" :status :response-time ms'
+
+  app.use(morgan(loggerFormat, {
+    skip: function (req, res) {
+        return res.statusCode < 400
+    },
+    stream: process.stderr
+  }));
+  app.use(morgan(loggerFormat, {
+      skip: function (req, res) {
+          return res.statusCode >= 400
+      },
+      stream: process.stderr
+  }));
+
   app.use(chatRoutes);
   app.use(textRoutes);
   app.use(imgRoutes);
