@@ -75,7 +75,7 @@ router.post("/v1/completions", async (req, res) => {
 
     const data = {
       id: "cmpl-7UR4UcvmeD79Xva3UxkKkL2es6b5W",
-      object: "chat.completion.chunk",
+      object: "text_completion",
       created: Date.now(),
       model: model,
       choices: [
@@ -125,7 +125,7 @@ router.post("/v1/completions", async (req, res) => {
 
     const response = {
       id: "cmpl-2nYZXNHxx1PeK1u8xXcE1Fqr1U6Ve",
-      object: "chat.completion",
+      object: "text_completion",
       created: Math.floor(Date.now() / 1000),
       model: model,
       usage: {
