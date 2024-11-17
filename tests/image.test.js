@@ -13,14 +13,17 @@ describe("POST /v1/images/generations", () => {
         model: "dall-e-3",
     }
     // Happy Path and Response (normal). Check n is equalt to 1 or not.
+    const startTime = performance.now();
     it("should return a valid response for a image generation request", async () => {
         const response = await request(app)
             .post("/v1/images/generations")
             .set("Content-Type", "application/json")
+            .set('x-set-response-delay-ms', '1000')
             .send(reqBody);
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
         expect(response.body.data.length).toBeGreaterThan(0);
+        expect(performance.now() - startTime).toBeGreaterThanOrEqual(1000);
         for (let i=0; i<response.body.data.length; i++) {
             expect(response.body.data[i]).toHaveProperty("revised_prompt");
             expect(response.body.data[i]).toHaveProperty("data");
