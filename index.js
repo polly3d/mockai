@@ -14,10 +14,9 @@ const delay = require("./utils/delay")
 const { register, requestCounter, requestLatency, payloadSize } = require("./utils/metrics")
 
 
-const start = async () => {
+const setupApp = async () => {
   await loadRandomContents();
 
-  const port = process.env.SERVER_PORT || 5001;
   const req_limit = process.env.REQUEST_SIZE_LIMIT || "10kb";
   app.use(express.json({"limit": req_limit}));
   
@@ -26,7 +25,7 @@ const start = async () => {
   morgan.token('id', function getId(req) {
       return req.id
   });
-  loggerFormat = ':id [:date[web]]" :method :url" :status :response-time ms'
+  const loggerFormat = ':id [:date[web]]" :method :url" :status :response-time ms'
 
   app.use(morgan(loggerFormat, {
     skip: function (req, res) {
@@ -47,17 +46,17 @@ const start = async () => {
   app.use(embeddingRoutes);
 
   app.get("/", async (req, res) => {
-    then = Date.now();
+    const then = Date.now();
     const delayHeader = req.headers["x-set-response-delay-ms"]
 
-  let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
+    let delayTime = parseInt(delayHeader) || parseInt(process.env.RESPONSE_DELAY_MS) || 0
 
-  await delay(delayTime)
+    await delay(delayTime)
 
-  requestCounter.inc({ method: "GET", path: "/", status: res.statusCode });
-  requestLatency.observe({ method: "GET", path: "/", status: 200 }, (Date.now() - then));
-  payloadSize.observe({ method: "GET", path: "/", status: 200 }, req.socket.bytesRead);
-  res.send("Hello World! This is MockAI");
+    requestCounter.inc({ method: "GET", path: "/", status: res.statusCode });
+    requestLatency.observe({ method: "GET", path: "/", status: 200 }, (Date.now() - then));
+    payloadSize.observe({ method: "GET", path: "/", status: 200 }, req.socket.bytesRead);
+    res.send("Hello World! This is MockAI");
   });
 
   app.get("/metrics", async (req, res) => {
@@ -66,16 +65,28 @@ const start = async () => {
   });
 
   app.use(function (req, res) {
-    then = Date.now();
+    const then = Date.now();
     requestCounter.inc({ method: req.method, path: req.path, status: 404 });
     requestLatency.observe({ method: req.method, path: req.path, status: 404 }, (Date.now() - then));
     payloadSize.observe({ method: req.method, path: req.path, status: 404 }, req.socket.bytesRead);
     res.status(404).send("Page not found");
   });
 
+  return app;
+};
+
+const startServer = async () => {
+  await setupApp();
+  const port = process.env.SERVER_PORT || 5001;
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
   });
 };
 
-start();
+// Export both the app and the setup function
+module.exports = { app, setupApp };
+
+// Start the server if this file is run directly
+if (require.main === module) {
+  startServer();
+}
