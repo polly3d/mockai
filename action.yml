@@ -29,7 +29,7 @@ inputs:
     default: '10kb'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'Dockerfile.actions'
   env:
     SERVER_PORT: ${{ inputs.server-port }}
     MOCK_TYPE: ${{ inputs.mock-type }}
