@@ -3,9 +3,25 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '*.js'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'tests/*.js'
+      - 'openAI/*.js'
+      - 'utils/*'
+      - 'data/*'
   pull_request:
     branches:
       - main
+    paths:
+      - '*.js'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'tests/*.js'
+      - 'openAI/*.js'
+      - 'utils/*'
+      - 'data/*'
 jobs:
   test:
     runs-on: ubuntu-latest

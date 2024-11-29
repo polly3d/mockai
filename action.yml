@@ -1,0 +1,42 @@
+name: Mockai
+author: Jim Stripe
+description: Mocking OpenAI and other providers API Endpoints
+
+inputs:
+  server-port:
+    description: 'Server Port'
+    required: false
+    default: '5002'
+  mock-type:
+    description: 'Mock Type'
+    required: false
+    default: 'random'
+  mock-file-path:
+    description: 'Mock File Path'
+    required: false
+    default: 'data/contents.txt'
+  mock-file-separator:
+    description: 'Mock File Separator'
+    required: false
+    default: '@@@@'
+  response-delay-ms:
+    description: 'Response Delay in ms'
+    required: false
+    default: '500'
+  request-size-limit:
+    description: 'Request Size Limit'
+    required: false
+    default: '10kb'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    SERVER_PORT: ${{ inputs.server-port }}
+    MOCK_TYPE: ${{ inputs.mock-type }}
+    MOCK_FILE_PATH: ${{ inputs.mock-file-path }}
+    MOCK_FILE_SEPARATOR: ${{ inputs.mock-file-separator }}
+    RESPONSE_DELAY_MS: ${{ inputs.response-delay-ms }}
+    REQUEST_SIZE_LIMIT: ${{ inputs.request-size-limit }}
+branding:
+  icon: 'terminal'
+  color: 'green'
