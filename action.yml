@@ -1,6 +1,6 @@
-name: Mockai
-author: Jim Stripe
-description: Mocking OpenAI and other providers API Endpoints
+name: 'MockAI'
+description: 'Mocking OpenAI and other providers API Endpoints'
+author: 'Jim Stripe'
 
 inputs:
   server-port:
@@ -28,15 +28,28 @@ inputs:
     required: false
     default: '10kb'
 runs:
-  using: 'docker'
-  image: 'Dockerfile.actions'
-  env:
-    SERVER_PORT: ${{ inputs.server-port }}
-    MOCK_TYPE: ${{ inputs.mock-type }}
-    MOCK_FILE_PATH: ${{ inputs.mock-file-path }}
-    MOCK_FILE_SEPARATOR: ${{ inputs.mock-file-separator }}
-    RESPONSE_DELAY_MS: ${{ inputs.response-delay-ms }}
-    REQUEST_SIZE_LIMIT: ${{ inputs.request-size-limit }}
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: 'polly3d/mockai'
+        path: 'mockai'
+    - uses: docker/build-push-action@v5
+      with:
+        context: mockai
+        push: false
+        load: true
+        tags: mockai:latest
+    - run: |
+        docker run -d -p ${{ inputs.server-port }}:${{ inputs.server-port }} \
+          -e SERVER_PORT=${{ inputs.server-port }} \
+          -e MOCK_TYPE=${{ inputs.mock-type }} \
+          -e MOCK_FILE_PATH=${{ inputs.mock-file-path }} \
+          -e MOCK_FILE_SEPARATOR=${{ inputs.mock-file-separator }} \
+          -e RESPONSE_DELAY_MS=${{ inputs.response-delay-ms }} \
+          -e REQUEST_SIZE_LIMIT=${{ inputs.request-size-limit }} \
+          mockai:latest
+      shell: bash
 branding:
-  icon: 'terminal'
-  color: 'green'
+  icon: 'cloud'
+  color: 'blue'
