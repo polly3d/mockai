@@ -12,6 +12,7 @@ const embeddingRoutes = require("./openAI/embeddings");
 const modelRoutes = require("./openAI/models");
 const moderationRoutes = require("./openAI/moderation");
 const audioRoutes = require("./openAI/audio");
+const fineTuningRoutes = require("./openAI/fineTuning");
 const { load: loadRandomContents } = require("./utils/randomContents");
 const delay = require("./utils/delay")
 const { register, requestCounter, requestLatency, payloadSize } = require("./utils/metrics")
@@ -48,6 +49,7 @@ const setupApp = async () => {
   app.use(modelRoutes);
   app.use(moderationRoutes);
   app.use(audioRoutes);
+  app.use(fineTuningRoutes);
 
   app.get("/", async (req, res) => {
     const then = Date.now();
