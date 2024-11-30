@@ -55,6 +55,9 @@ runs:
         docker ps
         netstat -tuln | grep ${{ inputs.server-port }}
       shell: bash
+    - name: sleep
+      run: sleep 5
+      shell: bash
     - name: check docker logs
       run: |
         docker logs $(docker ps -q --filter ancestor=mockai:latest)
