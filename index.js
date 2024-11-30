@@ -13,6 +13,7 @@ const modelRoutes = require("./openAI/models");
 const moderationRoutes = require("./openAI/moderation");
 const audioRoutes = require("./openAI/audio");
 const fineTuningRoutes = require("./openAI/fineTuning");
+const batchRoutes = require("./openAI/batch");
 const { load: loadRandomContents } = require("./utils/randomContents");
 const delay = require("./utils/delay")
 const { register, requestCounter, requestLatency, payloadSize } = require("./utils/metrics")
@@ -50,6 +51,7 @@ const setupApp = async () => {
   app.use(moderationRoutes);
   app.use(audioRoutes);
   app.use(fineTuningRoutes);
+  app.use(batchRoutes);
 
   app.get("/", async (req, res) => {
     const then = Date.now();
