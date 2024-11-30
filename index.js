@@ -9,17 +9,18 @@ const chatRoutes = require("./openAI/chat");
 const textRoutes = require("./openAI/text");
 const imgRoutes = require("./openAI/image");
 const embeddingRoutes = require("./openAI/embeddings");
+const modelRoutes = require("./openAI/models");
+const moderationRoutes = require("./openAI/moderation");
+const audioRoutes = require("./openAI/audio");
 const { load: loadRandomContents } = require("./utils/randomContents");
 const delay = require("./utils/delay")
 const { register, requestCounter, requestLatency, payloadSize } = require("./utils/metrics")
-
 
 const setupApp = async () => {
   await loadRandomContents();
 
   const req_limit = process.env.REQUEST_SIZE_LIMIT || "10kb";
   app.use(express.json({"limit": req_limit}));
-  
   // Request Logger Configuration
   app.use(requestId);
   morgan.token('id', function getId(req) {
@@ -44,6 +45,9 @@ const setupApp = async () => {
   app.use(textRoutes);
   app.use(imgRoutes);
   app.use(embeddingRoutes);
+  app.use(modelRoutes);
+  app.use(moderationRoutes);
+  app.use(audioRoutes);
 
   app.get("/", async (req, res) => {
     const then = Date.now();
