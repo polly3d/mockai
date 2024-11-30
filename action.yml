@@ -50,18 +50,9 @@ runs:
           -e REQUEST_SIZE_LIMIT=${{ inputs.request-size-limit }} \
           mockai:latest
       shell: bash
-    - name: check if server is running
-      run: |
-        docker ps
-        netstat -tuln | grep ${{ inputs.server-port }}
-      shell: bash
     - name: sleep
       run: sleep 5
       shell: bash
-    - name: check docker logs
-      run: |
-        docker logs $(docker ps -q --filter ancestor=mockai:latest)
-      shell: bash 
 branding:
   icon: 'cloud'
   color: 'blue'
