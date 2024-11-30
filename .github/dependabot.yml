@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "rastogiji"
+    reviewers:
+      - "rastogiji"
+    commit-message:
+      prefix: "chore(deps)"
+    open-pull-requests-limit: 10
