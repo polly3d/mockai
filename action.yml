@@ -34,7 +34,7 @@ runs:
       with:
         repository: 'polly3d/mockai'
         path: 'mockai'
-    - uses: docker/build-push-action@v5
+    - uses: docker/build-push-action@v6
       with:
         context: mockai
         push: false
