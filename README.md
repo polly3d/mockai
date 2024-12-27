@@ -4,12 +4,7 @@ MockAI is a mock server for OpenAI's API. It allows you to simulate API response
 
 ## Features
 
-- Supports the following endpoints:
-
-  - `/v1/completions`
-  - `/v1/chat/completions`
-  - `/v1/images/generations`
-
+- Supports all the OpenAI (more providers coming soon) endpoints:
 - Allows you to specify the type of mock response: echo, random, or fixed.
 - Supports both single responses and streaming responses.
 - Reads random responses from a text file.
@@ -19,7 +14,7 @@ MockAI is a mock server for OpenAI's API. It allows you to simulate API response
 1. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 2. Set env
@@ -36,7 +31,7 @@ MOCK_FILE_SEPARATOR="@@@@"
 3. Start server:
 
 ```bash
-npm start
+pnpm start
 ```
 
 ## Environment Variables
