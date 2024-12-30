@@ -1,5 +1,6 @@
 name: Validate Docker Image
 on:
+    workflow_dispatch:
     pull_request:
         branches:
             - main
@@ -11,14 +12,20 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [ubuntu-latest, macos-latest]
+                os: [ubuntu-latest]
         steps:
         - name: Checkout Repository 
           uses: actions/checkout@v4
+        - name: Setup Docker
+          if: runner.os == 'macos'
+          run: |
+            brew install colima
+            brew install --cask docker
+            colima start
         - name: Build Docker Image
           run: docker build -t mockai:test .
         - name: Run Docker Container
-          run: docker run -dp 5002:5002 mockai:test --name mockai-container 
+          run: docker run --name mockai-container -dp 5002:5002 mockai:test 
         - name: Check if Container is Running
           run: docker ps | grep mockai-container
         - name: Test Server Response
@@ -33,4 +40,3 @@ jobs:
         - name: Check server logs
           if: failure()
           run: docker logs mockai-container
-            
