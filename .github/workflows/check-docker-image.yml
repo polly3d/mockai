@@ -30,6 +30,7 @@ jobs:
           run: docker ps | grep mockai-container
         - name: Test Server Response
           run: |
+            sleep 10
             response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5002)
             if [ $response = "200" ]; then
               echo "Server is responding correctly"
