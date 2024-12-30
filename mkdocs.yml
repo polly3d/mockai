@@ -1,0 +1,69 @@
+site_name: MockAI
+site_author: Animesh Rastogi
+site_description: Mocking OpenAI and other providers API Endpoints
+repo_name: polly3d/mockai
+repo_url: https://github.com/polly3d/mockai
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; 2024 Jim Stripe and Animesh Rastogi.
+theme:
+  name: material
+  features:
+    - navigation.footer
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+    - navigation.top
+    - toc.integrate
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+    
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: indigo
+      accent: deep purple
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: blue
+      accent: deep orange
+nav:
+  - Home: index.md
+  - Installation: Installation.md
+  - Quickstart: Quickstart.md
+
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+extra:
+  social:
+    - icon: simple/github
+      link: https://github.com/polly3d/mockai
+    - icon: simple/linkedin
+      link: https://www.linkedin.com/in/animeshrastogi54/
+
