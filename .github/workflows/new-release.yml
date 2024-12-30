@@ -1,0 +1,36 @@
+name: Validate Docker Image
+on:
+    pull_request:
+        branches:
+            - main
+            - master
+        paths:
+            - 'Dockerfile'
+jobs:
+    test-docker-image:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+        - name: Checkout Repository 
+          uses: actions/checkout@v4
+        - name: Build Docker Image
+          run: docker build -t mockai:test .
+        - name: Run Docker Container
+          run: docker run -dp 5002:5002 mockai:test --name mockai-container 
+        - name: Check if Container is Running
+          run: docker ps | grep mockai-container
+        - name: Test Server Response
+          run: |
+            response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5002)
+            if [ $response = "200" ]; then
+              echo "Server is responding correctly"
+            else
+              echo "Server is not responding as expected. HTTP status code: $response"
+              exit 1
+            fi
+        - name: Check server logs
+          if: failure()
+          run: docker logs mockai-container
+            
