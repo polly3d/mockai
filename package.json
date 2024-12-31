@@ -1,6 +1,6 @@
 {
   "name": "mockai",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "MockAI is a Node.js and Express.js based mock server that simulates the OpenAI Chat API. It supports both single and streaming responses, providing a flexible environment for testing and development.",
   "main": "index.js",
   "scripts": {
