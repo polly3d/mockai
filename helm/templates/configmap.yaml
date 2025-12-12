@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mockai.fullname" . }}
+  labels:
+    {{- include "mockai.labels" . | nindent 4 }}
+data:
+  .env: |
+    {{- range $key, $value := .Values.config }}
+    {{ $key }}={{ $value }}
+    {{- end }}
+    {{- with .Values.mockResponses }}
+    MOCK_FILE_PATH=/app/data/contents.txt
+    {{- end }}
+  {{- with .Values.mockResponses }}
+  contents.txt: |
+    {{- if $.Values.mockResponses.file }}
+    {{- $.Files.Get $.Values.mockResponses.file | nindent 4 }}
+    {{- else }}
+    {{- $.Values.mockResponses.content | nindent 4 }}
+    {{- end }}
+  {{- end }}
