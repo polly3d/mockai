@@ -1,0 +1,53 @@
+replicaCount: 1
+
+image:
+  repository: tytn/mockai
+  pullPolicy: IfNotPresent
+  tag: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+config:
+  SERVER_PORT: "5002"
+  # MOCK_TYPE: "random"
+  # MOCK_FILE_SEPARATOR: "@@@@"
+  # RESPONSE_DELAY_MS: "500"
+
+mockResponses:
+  # Provide mock responses inline
+  # content: |
+  #   Hi there! How can I assist you today? 😊
+  #   This is a break line text.
+  #   @@@@
+  #   Here are a few suggestions based on what you've typed so far:
+
+  #   ```js
+  #   const suggestions = [
+  #     "How to book a flight",
+  #     "What are the best hotels in New York",
+  #     "Things to do in Tokyo"
+  #   ];
+  #   ```
+
+  #   Thank you for your message. Our team will get back to you as soon as possible. 🙏
+  #   @@@@
+  #   Here's some Python code:
+  #   This is a break line text.
+
+  #   ```py
+  #   def greet(name):
+  #     print('Hello, ' + name + '!')
+  #   ```
+
+  # Or reference a file from the chart's files/ directory
+  # file: "responses.txt"
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
